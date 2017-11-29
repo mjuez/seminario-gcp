@@ -1,4 +1,5 @@
-# Seminario: Ingeniería de datos en la nube con Google Cloud Platform
+# Seminario
+## Ingeniería de datos en la nube con Google Cloud Platform
 
 Éste repositorio contiene los scripts y archivos utilizados en el seminario sobre ingeniería de datos en la nube con Google Cloud Platform.
 
