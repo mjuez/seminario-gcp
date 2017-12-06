@@ -5,7 +5,7 @@
 #
 #   * 1 Nodo maestro n1-standard-1 (3.75GB RAM) + 10GB HDD
 #   * 2 Nodos trabajadores n1-standard-1 (3.75GB RAM) + 10GB HDD
-#   * 5 Nodos trabajadores prioritarios (preemtive)
+#   * 5 Nodos trabajadores prioritarios (preemtive) (no asegurados)
 #   Máximos recursos posibles: 21GB RAM + 80GB HDD
 #   Mínimos recursos asegurados: 11.25GB RAM + 30GB HDD
 #
