@@ -14,28 +14,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Creación de un modelo de machine learning (regresion linear)
+# Creacion de un modelo de machine learning (regresion linear)
 # en Apache Spark ML.
 #
 # El modelo generado sirve para predecir el peso de un recien nacido
 # en base a los siguientes valores:
 #   * Edad de la madre
 #   * Edad del padre
-#   * Semanas de gestación
+#   * Semanas de gestacion
 #   * Ganancia de peso de la madre
-#   * Puntuación apgar
+#   * Puntuacion apgar
 # 
 # Los dataset de entrenamiento y test han sido obtenidos del conjunto
-# de datos público [publicdata:samples.natality] de BigQuery.
+# de datos publico [publicdata:samples.natality] de BigQuery.
 # 
-# Este código se ejecuta como una tarea de Google Cloud Dataproc.
+# Este codigo se ejecuta como una tarea de Google Cloud Dataproc.
 # 
-# Este código es una adaptación del siguiente ejemplo desarrollado
+# Este codigo es una adaptacion del siguiente ejemplo desarrollado
 # por Google: 
 #   
 #   https://cloud.google.com/dataproc/docs/tutorials/bigquery-sparkml
 # 
-# Adaptación realizada por Mario Juez <mario@mjuez.com>
+# Adaptacion realizada por Mario Juez <mario@mjuez.com>
 
 from pyspark.conf import SparkConf
 from pyspark.sql import SparkSession
@@ -66,7 +66,7 @@ def clean_null(data):
   clean_data = spark.sql(query)
   return clean_data
 
-# Lectura del dataset desde un fichero CSV y conversión a dataframe.
+# Lectura del dataset desde un fichero CSV y conversion a dataframe.
 def dataframe_from_csv(csv):
   readed_data = spark.read.csv(csv, header=True, mode="DROPMALFORMED", inferSchema=True)
   clean_data = clean_null(readed_data)
@@ -74,7 +74,7 @@ def dataframe_from_csv(csv):
   df.cache()
   return df
 
-# Separación etiqueta-características.
+# Separacion etiqueta-caracteristicas.
 def vector_from_inputs(r):
   return (r["peso"], Vectors.dense(float(r["edad_madre"]),
                                             float(r["edad_padre"]),
@@ -90,7 +90,7 @@ lr = LinearRegression(maxIter=10, regParam=0.2, solver="normal")
 model = lr.fit(training_data)
 print ">>> Entrenamiento terminado... RMSE:"+ str(model.summary.meanSquaredError)
 
-# Predicción del conjunto de test.
+# Prediccion del conjunto de test.
 print ">>> Leyendo datos de test..."
 testing_data = dataframe_from_csv(NATALITY_TEST_CSV)
 print ">>> Realizando predicciones sobre conjunto de test..."
@@ -98,11 +98,11 @@ predictions = model.transform(testing_data)
 print ">>> Predicciones terminadas..."
 predictions.select("prediction", "label", "features").show(5)
 
-# Evaluación del modelo.
+# Evaluacion del modelo.
 print ">>> Evaluando el modelo..."
 evaluator = RegressionEvaluator()
 rmse = evaluator.evaluate(predictions)
-print ">>> Evaluación terminada... RMSE:" + str(rmse)
+print ">>> Evaluacion terminada... RMSE:" + str(rmse)
 
 # Almacenamiento del modelo para su uso posterior.
 print ">>> Guardando el modelo..."
