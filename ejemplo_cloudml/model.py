@@ -24,7 +24,7 @@ def build_estimator(output_dir):
 def csv_serving_input_fn():
   csv_row = tf.placeholder(
       shape=[None],
-      dtype=tf.float32
+      dtype=tf.string
   )
   features = parse_csv(csv_row)
   features.pop(LABEL_COLUMN)
