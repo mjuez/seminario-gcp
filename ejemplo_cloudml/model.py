@@ -30,6 +30,10 @@ def csv_serving_input_fn():
   features.pop(LABEL_COLUMN)
   return tf.contrib.learn.InputFnOps(features, None, {'csv_row': csv_row})
 
+SERVING_FUNCTIONS = {
+    'CSV': csv_serving_input_fn
+}
+
 def parse_csv(rows_tensor):
   row_columns = tf.expand_dims(rows_tensor, -1)
   columns = tf.decode_csv(row_columns, record_defaults=CSV_COLUMN_DEFAULTS)
