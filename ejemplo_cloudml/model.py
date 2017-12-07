@@ -5,9 +5,10 @@ from __future__ import print_function
 import multiprocessing
 
 import tensorflow as tf
+import pandas as pd
 
 CSV_COLUMNS = ['peso', 'edad_madre', 'edad_padre', 'semanas_gestacion', 'ganancia_peso', 'puntuacion_apgar']
-CSV_COLUMN_DEFAULTS = [0, 0, 0, 0, 0, 0]
+CSV_COLUMN_DEFAULTS = [[0.0], [0.0], [0.0], [0.0], [0.0], [0.0]]
 LABEL_COLUMN = 'peso'
 
 INPUT_COLUMNS = [
