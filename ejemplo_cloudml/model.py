@@ -43,7 +43,7 @@ def parse_csv(rows_tensor):
 
 def generate_input_fn(filenames,
                       num_epochs=None,
-                      skip_header_lines=0,
+                      skip_header_lines=1,
                       batch_size=200):
     filename_queue = tf.train.string_input_producer(
         filenames, num_epochs=num_epochs, shuffle=True)
