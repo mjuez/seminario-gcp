@@ -53,18 +53,19 @@ if __name__ == '__main__':
       whichever occurs first. If unspecified will run for --max-steps.\
       """,
       type=int,
+      default=10
   )
   parser.add_argument(
       '--train-batch-size',
       help='Batch size for training steps',
       type=int,
-      default=40
+      default=800
   )
   parser.add_argument(
       '--eval-batch-size',
       help='Batch size for evaluation steps',
       type=int,
-      default=40
+      default=200
   )
   parser.add_argument(
       '--eval-files',

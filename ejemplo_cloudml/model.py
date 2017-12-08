@@ -46,7 +46,7 @@ def generate_input_fn(filenames,
                       skip_header_lines=1,
                       batch_size=200):
     filename_queue = tf.train.string_input_producer(
-        filenames, num_epochs=num_epochs, shuffle=True)
+        filenames, num_epochs=num_epochs, shuffle=False)
     reader = tf.TextLineReader(skip_header_lines=skip_header_lines)
 
     _, rows = reader.read_up_to(filename_queue, num_records=batch_size)
@@ -54,10 +54,9 @@ def generate_input_fn(filenames,
     # Parse the CSV File
     features = parse_csv(rows)
 
-    features = tf.train.shuffle_batch(
+    features = tf.train.batch(
         features,
         batch_size,
-        min_after_dequeue=2 * batch_size + 1,
         capacity=batch_size * 10,
         num_threads=multiprocessing.cpu_count(),
         enqueue_many=True,
