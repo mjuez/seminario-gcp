@@ -1,3 +1,25 @@
+#!/usr/bin/env python
+
+# Copyright 2017 Mario Juez. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Creacion de una tarea de entrenamiento de Google Cloud ML.
+#
+# Tarea basada en el ejemplo Census de Cloud ML:
+#   https://github.com/GoogleCloudPlatform/cloudml-samples/tree/master/census
+# Autor: Mario Juez <mario@mjuez.com>
+
 import argparse
 import os
 
@@ -12,75 +34,73 @@ from tensorflow.contrib.training.python.training import hparam
 
 
 def generate_experiment_fn(**experiment_args):
-
-  def _experiment_fn(run_config, hparams):
-    # num_epochs can control duration if train_steps isn't
-    # passed to Experiment
-    train_input = lambda: model.generate_input_fn(
-        hparams.train_files,
-        num_epochs=hparams.num_epochs,
-        batch_size=hparams.train_batch_size,
-    )
-    # Don't shuffle evaluation data
-    eval_input = lambda: model.generate_input_fn(
-        hparams.eval_files,
-        batch_size=hparams.eval_batch_size
-    )
-    return tf.contrib.learn.Experiment(
-        model.build_estimator(hparams.job_dir),
-        train_input_fn=train_input,
-        eval_input_fn=eval_input,
-        **experiment_args
-    )
-  return _experiment_fn
+    """Creacion del experimento a correr en Cloud ML"""
+    def _experiment_fn(run_config, hparams):
+        """Definicion de experimento"""
+        # Funcion de entrada de entrenamiento
+        train_input = lambda: model.generate_input_fn(
+            hparams.train_files,
+            num_epochs=hparams.num_epochs,
+            batch_size=hparams.train_batch_size,
+        )
+        # Funcion de entrada de evaluacion
+        eval_input = lambda: model.generate_input_fn(
+            hparams.eval_files,
+            batch_size=hparams.eval_batch_size
+        )
+        # Experimento
+        return tf.contrib.learn.Experiment(
+            model.build_estimator(hparams.job_dir),
+            train_input_fn=train_input,
+            eval_input_fn=eval_input,
+            **experiment_args
+        )
+    return _experiment_fn
 
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
-  # Input Arguments
+  # Argumentos de entrada
   parser.add_argument(
       '--train-files',
-      help='GCS or local paths to training data',
+      help='Ficheros de entrenamiento.',
       nargs='+',
       required=True
   )
   parser.add_argument(
       '--num-epochs',
       help="""\
-      Maximum number of training data epochs on which to train.
-      If both --max-steps and --num-epochs are specified,
-      the training job will run for --max-steps or --num-epochs,
-      whichever occurs first. If unspecified will run for --max-steps.\
+      Numero de veces que se recorre el dataset (epochs).\
       """,
       type=int,
       default=10
   )
   parser.add_argument(
       '--train-batch-size',
-      help='Batch size for training steps',
+      help='Tamano de porciones del set de datos de entrenamiento.',
       type=int,
       default=800
   )
   parser.add_argument(
       '--eval-batch-size',
-      help='Batch size for evaluation steps',
+      help='Tamano de porciones del set de datos de evaluacion.',
       type=int,
       default=200
   )
   parser.add_argument(
       '--eval-files',
-      help='GCS or local paths to evaluation data',
+      help='Ficheros de evaluacion.',
       nargs='+',
       required=True
   )
-  # Training arguments
+  # Argumentos de entrenamiento
   parser.add_argument(
       '--job-dir',
-      help='GCS location to write checkpoints and export models',
+      help='Ruta (GCS) donde escribir el modelo y los puntos de guardado.',
       required=True
   )
 
-  # Argument to turn on all logging
+  # Argumento de logging
   parser.add_argument(
       '--verbosity',
       choices=[
@@ -92,53 +112,48 @@ if __name__ == '__main__':
       ],
       default='INFO',
   )
-  # Experiment arguments
+  # Argumentos del experimento
   parser.add_argument(
       '--eval-delay-secs',
-      help='How long to wait before running first evaluation',
+      help='Tiempo de espera hasta la primera evaluacion',
       default=10,
       type=int
   )
   parser.add_argument(
       '--min-eval-frequency',
-      help='Minimum number of training steps between evaluations',
-      default=None,  # Use TensorFlow's default (currently, 1000 on GCS)
+      help='Numero minimo de pasos de entrenamiento entre evaluaciones',
+      default=None,  # Por defecto 1000
       type=int
   )
   parser.add_argument(
       '--train-steps',
       help="""\
-      Steps to run the training job for. If --num-epochs is not specified,
-      this must be. Otherwise the training job will run indefinitely.\
+      Numero de pasos de entrenamiento.
+      Se debe fijar si no se utiliza el numero de epochs.\
       """,
       type=int
   )
   parser.add_argument(
       '--eval-steps',
-      help='Number of steps to run evalution for at each checkpoint',
+      help='Numero de pasos de evaluacion',
       default=100,
       type=int
   )
   parser.add_argument(
       '--export-format',
-      help='The input format of the exported SavedModel binary',
+      help='Formato de exportacion.',
       choices=['CSV'],
       default='CSV'
   )
 
   args = parser.parse_args()
 
-  # Set python level verbosity
+  # Configurando el nivel de logging.
   tf.logging.set_verbosity(args.verbosity)
-  # Set C++ Graph Execution level verbosity
   os.environ['TF_CPP_MIN_LOG_LEVEL'] = str(
       tf.logging.__dict__[args.verbosity] / 10)
 
-  # [START learn-runner]
-  # Run the training job
-  # learn_runner pulls configuration information from environment
-  # variables using tf.learn.RunConfig and uses this configuration
-  # to conditionally execute Experiment, or param server code
+  # Ejecucion del entrenamiento.
   learn_runner.run(
       generate_experiment_fn(
           min_eval_frequency=args.min_eval_frequency,
@@ -154,4 +169,3 @@ if __name__ == '__main__':
       run_config=run_config.RunConfig(model_dir=args.job_dir),
       hparams=hparam.HParams(**args.__dict__)
   )
-  # [END learn-runner]

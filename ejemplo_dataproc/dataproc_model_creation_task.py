@@ -54,6 +54,7 @@ spark = SparkSession.builder.config(conf=configuration).getOrCreate()
 # Para evitar problemas, se eliminan todas aquellas filas
 # que contengan valores nulos.
 def clean_null(data):
+  """Elimina valores nulos del dataset."""
   data.createOrReplaceTempView("data_view")
   query = """
     SELECT *
@@ -68,19 +69,20 @@ def clean_null(data):
 
 # Lectura del dataset desde un fichero CSV y conversion a dataframe.
 def dataframe_from_csv(csv):
+  """Crea un dataframe a partir de un fichero CSV"""
   readed_data = spark.read.csv(csv, header=True, mode="DROPMALFORMED", inferSchema=True)
   clean_data = clean_null(readed_data)
   df = clean_data.rdd.map(vector_from_inputs).toDF(["label","features"])
   df.cache()
   return df
 
-# Separacion etiqueta-caracteristicas.
-def vector_from_inputs(r):
-  return (r["peso"], Vectors.dense(float(r["edad_madre"]),
-                                            float(r["edad_padre"]),
-                                            float(r["semanas_gestacion"]),
-                                            float(r["ganancia_peso"]),
-                                            float(r["puntuacion_apgar"])))
+def vector_from_inputs(row):
+  """Separacion etiqueta-caracteristicas."""
+  return (row["peso"], Vectors.dense(float(row["edad_madre"]),
+                                            float(row["edad_padre"]),
+                                            float(row["semanas_gestacion"]),
+                                            float(row["ganancia_peso"]),
+                                            float(row["puntuacion_apgar"])))
 
 # Entrenamiento.
 print ">>> Leyendo datos de entrenamiento..."
