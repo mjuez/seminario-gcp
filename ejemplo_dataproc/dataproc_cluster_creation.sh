@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Creación del cluster Dataproc necesario para la creación del
-# modelo de regresión linear del ejemplo.
+# modelo de regresión lineal del ejemplo.
 #
 #   * 1 Nodo maestro n1-standard-1 (3.75GB RAM) + 10GB HDD
 #   * 2 Nodos trabajadores n1-standard-1 (3.75GB RAM) + 10GB HDD

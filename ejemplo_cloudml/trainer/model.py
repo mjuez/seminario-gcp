@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Creacion de un modelo de machine learning (regresion linear)
+# Creacion de un modelo de machine learning (regresion lineal)
 # en Cloud ML Engine (TensorFlow)
 #
 # El modelo generado sirve para predecir el peso de un recien nacido
@@ -54,7 +54,7 @@ INPUT_COLUMNS = [
 ]
 
 def build_estimator(output_dir):
-    """Construccion del estimador de regresion linear"""
+    """Construccion del estimador de regresion lineal"""
     return tf.contrib.learn.LinearRegressor(model_dir=output_dir, feature_columns=INPUT_COLUMNS)
 
 def csv_serving_input_fn():

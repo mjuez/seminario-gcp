@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Creacion de un modelo de machine learning (regresion linear)
+# Creacion de un modelo de machine learning (regresion lineal)
 # en Apache Spark ML.
 #
 # El modelo generado sirve para predecir el peso de un recien nacido

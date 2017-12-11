@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Ejemplo de prediccion usando el modelo de regresion linear.
+# Ejemplo de prediccion usando el modelo de regresion lineal.
 # Se debe ejecutar desde PySpark, en la consola SSH del cluster.
 #
 # Autor: Mario Juez <mario@mjuez.com>
