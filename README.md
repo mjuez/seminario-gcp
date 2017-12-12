@@ -5,5 +5,5 @@ Este repositorio contiene los scripts y archivos utilizados en el seminario sobr
 Seminario impartido por Mario Juez <[mario@mjuez.com](mailto:mario@mjuez.com)>.
 
 <p align="center">
-<a href="http://admirable-ubu.es/" target="_BLANK"><img src="https://i.imgur.com/NKqsJ2K.png" alt="Admirable Group"/></a>
+<a href="http://admirable-ubu.es/" target="_BLANK"><img src="https://i.imgur.com/0VImsh7.png" alt="Admirable Group" width="150" height="150"/></a>
 </p>
