@@ -44,7 +44,7 @@ CSV_COLUMNS = ['peso', 'edad_madre', 'edad_padre', 'semanas_gestacion', 'gananci
 CSV_COLUMN_DEFAULTS = [[0.0], [0.0], [0.0], [0.0], [0.0], [0.0]]
 # Etiqueta a predecir.
 LABEL_COLUMN = 'peso'
-# Trabajamos con características numericas.
+# Trabajamos con caracteristicas numericas.
 INPUT_COLUMNS = [
     tf.feature_column.numeric_column('edad_madre'),
     tf.feature_column.numeric_column('edad_padre'),
@@ -103,4 +103,3 @@ def generate_input_fn(filenames,
     # Obtencion de etiqueta
     label = features.pop(LABEL_COLUMN)
     return features, label
-
